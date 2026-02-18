@@ -1,0 +1,57 @@
+PRACTICA 1 - Configuración del tiempo de espera de GRUB y recuperación de contraseña de root
+sudo nano /etc/default/grub
+sudo update-grub
+sudo reboot
+e
+init=/bin/bash
+mount -o remount,rw /
+passwd sistemas3
+exit
+reboot
+_________________________
+
+PRACTICA 2 - Automatización de tareas con Bash: backup e ifconfig
+nano backup.sh
+
+FECHA=$(date +"%d-%m-%Y-%H-%M")
+tar -czvf backup-$FECHA.tar.gz /home/sistemas3
+chmod +x backup.sh
+./backup.sh
+ls
+
+nano ifconfig_script.sh
+echo "Digite el nombre del archivo:"
+read nombre
+
+ifconfig > /home/sistemas3/Escritorio/$nombre.txt
+
+echo "Archivo creado en el Escritorio con el nombre $nombre.txt"
+
+chmod +x ifconfig_script.sh
+./ifconfig_script.sh
+ls ~/Escritorio
+cat ~/Escritorio/INFO.txt
+________________________________
+
+PRACTICA 3 Acceso remoto desde Windows a Linux usando SSH
+ip a
+ping -c 3 8.8.8.8
+ping 192.168.1.50
+sudo systemctl start ssh
+sudo systemctl enable ssh
+sudo systemctl status ssh
+ssh sistemas3@192.168.1.50
+exit
+
+ssh-keygen
+type $env:USERPROFILE\.ssh\id_ed25519.pub | ssh sistemas3@192.168.1.50 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+ls -ld ~/.ssh
+ls -l ~/.ssh/authorized_keys
+
+ssh sistemas3@192.168.1.50
+
+
+
