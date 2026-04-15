@@ -1,57 +1,145 @@
-PRACTICA 1 - Configuración del tiempo de espera de GRUB y recuperación de contraseña de root
+# =========================
+# PRACTICA 1 - Configuración del tiempo de espera de GRUB y recuperación de contraseña de root
+# =========================
+
 sudo nano /etc/default/grub
+# Abrir el archivo de configuración de GRUB
+
+# Dentro del archivo buscar o modificar estas líneas:
+GRUB_TIMEOUT=20
+# Tiempo de espera de 20 segundos
+
+GRUB_TIMEOUT_STYLE=menu
+# Mostrar menú de GRUB
+
+# Guardar con CTRL + O, Enter y salir con CTRL + X
+
 sudo update-grub
+# Aplicar cambios en GRUB
+
 sudo reboot
-e
+# Reiniciar el sistema
+
+# Durante el arranque:
+# Presiona la tecla e sobre la opción de Kali/Linux
+# Busca la línea que comienza con linux
+# Al final agregar:
 init=/bin/bash
+
+# Debe quedar parecido a esto:
+linux /boot/vmlinuz-xxxx root=UUID=xxxx ro quiet splash init=/bin/bash
+
+# Presiona CTRL + X para iniciar en modo recuperación
+
 mount -o remount,rw /
+# Montar la raíz con permisos de escritura
+
 passwd sistemas3
+# Cambiar la contraseña del usuario
+
 exit
+# Salir de la shell
+
 reboot
-_________________________
+# Reiniciar normalmente
 
-PRACTICA 2 - Automatización de tareas con Bash: backup e ifconfig
+
+# =========================
+# PRACTICA 2 - Automatización de tareas con Bash: backup e ifconfig
+# =========================
+
 nano backup.sh
+# Crear el script de backup
 
+# Dentro de nano escribir exactamente esto:
+#!/bin/bash
 FECHA=$(date +"%d-%m-%Y-%H-%M")
 tar -czvf backup-$FECHA.tar.gz /home/sistemas3
+echo "Creando copia de seguridad en /home/sistemas3. Nombre del archivo backup-$FECHA.tar.gz"
+
+# Guardar con CTRL + O, Enter y salir con CTRL + X
+
 chmod +x backup.sh
+# Dar permisos de ejecución
+
 ./backup.sh
+# Ejecutar el script
+
 ls
+# Verificar que se creó el backup
+
 
 nano ifconfig_script.sh
+# Crear el script para guardar la salida de ifconfig
+
+# Dentro de nano escribir:
+#!/bin/bash
 echo "Digite el nombre del archivo:"
 read nombre
-
 ifconfig > /home/sistemas3/Escritorio/$nombre.txt
-
 echo "Archivo creado en el Escritorio con el nombre $nombre.txt"
 
-chmod +x ifconfig_script.sh
-./ifconfig_script.sh
-ls ~/Escritorio
-cat ~/Escritorio/INFO.txt
-________________________________
+# Guardar con CTRL + O, Enter y salir con CTRL + X
 
-PRACTICA 3 Acceso remoto desde Windows a Linux usando SSH
+chmod +x ifconfig_script.sh
+# Dar permisos de ejecución
+
+./ifconfig_script.sh
+# Ejecutar el script
+
+ls ~/Escritorio
+# Verificar que el archivo fue creado
+
+cat ~/Escritorio/INFO.txt
+# Mostrar el contenido del archivo
+
+
+# =========================
+# PRACTICA 3 - Acceso remoto desde Windows a Linux usando SSH
+# =========================
+
 ip a
+# Ver la IP del equipo Linux
+
 ping -c 3 8.8.8.8
-ping 192.168.1.50
+# Probar internet
+
+ping (tu ip)
+# Verificar conexión con la IP del Linux
+
 sudo systemctl start ssh
+# Iniciar servicio SSH
+
 sudo systemctl enable ssh
+# Habilitar inicio automático
+
 sudo systemctl status ssh
-ssh sistemas3@192.168.1.50
+# Verificar estado del servicio
+
+ssh sistemas3@(tu ip)
+# Conectarse remotamente desde Windows/Linux
+
 exit
+# Salir de la conexión SSH
 
 ssh-keygen
+# Generar claves SSH
+
+# En Windows PowerShell:
 type $env:USERPROFILE\.ssh\id_ed25519.pub | ssh sistemas3@192.168.1.50 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+# Copiar clave pública al Linux
 
 chmod 700 ~/.ssh
+# Permisos correctos para carpeta .ssh
+
 chmod 600 ~/.ssh/authorized_keys
+# Permisos seguros para authorized_keys
+
 ls -ld ~/.ssh
+# Revisar permisos de la carpeta
+
 ls -l ~/.ssh/authorized_keys
+# Revisar permisos del archivo
 
 ssh sistemas3@192.168.1.50
-
-
-
+# Entrar sin contraseña
